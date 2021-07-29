@@ -1,8 +1,23 @@
-import React from 'react'
-import styles from '../scss/auth.module.scss'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+
+import styles from '../scss/auth.module.scss'
 
 function Signup() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const registerHandler = async (e) => {
+    e.preventDefault()
+    try {
+      const data = { email, password }
+      await axios.post('http://localhost:5000/api/auth/signup', data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className={styles.container}>
       <header style={{ paddingTop: '15px' }}>
@@ -21,17 +36,30 @@ function Signup() {
         </div>
         <p>Через элекетронную почту</p>
         <form className={styles.form}>
-          <input type="text" name="email" placeholder="Ваша электропочта" />
-          <input type="password" name="password" placeholder="Ваш пароль" />
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            name="email"
+            placeholder="Ваша электропочта"
+          />
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            name="password"
+            placeholder="Ваш пароль"
+            minlength="6"
+          />
 
-          <button className={styles.btn}>
+          <button onClick={registerHandler} className={styles.btn}>
             <img src="/img/icon/auth.svg" alt="auth" />
             <p>Создать аккаунт</p>
           </button>
         </form>
 
         <Link className={styles.link} to="/signin">
-          Уже есть аккаунтт?
+          Уже есть аккаунт?
         </Link>
 
         <h3 className={styles.personal}>
